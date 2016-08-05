@@ -1,25 +1,48 @@
 var express = require('express');
 var app = express();
-var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 
-// This line is responsible for serving up static content.
-app.use(express.static(process.cwd() + '/public')); //may be a problem***
-
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
-
-app.use(methodOverride('_method'));
-
 var exphbs = require('express-handlebars');
-app.engine('handlebars', exphbs({
-	defaultLayout: 'main'
-}));
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: false }));
 
-var routes = require('./controllers/burgers_controller.js');
-app.use('/', routes);
+var models = require('./models');
+var sha1 = require('sha1');
+console.log(models);
 
-var port = process.env.PORT || 3333;
-app.listen(port);
+var PORT = process.env.PORT || 3000;
+//==============================================//
+//						//
+//		Routes				//
+//						//
+//==============================================//
+
+app.get('/signup', function(req, res){
+   res.render('users/signup'); 
+});
+
+app.post('/user/create', function(req, res){
+    // console.log(req.body);
+    // models.Users.findAll({where: {email: req.body.newemail}})
+    // .then(function(users){
+    //     console.log(JSON.stringify(users));
+    // });
+    models.Users.create({
+        name: req.body.newname,
+        email: req.body.newemail,
+        password: sha1(req.body.newpassword)
+    });
+    res.send('Thank you for signing up');
+});
+
+//==============================================//
+//                                              //
+//              END ROUTES			//
+//                                              //
+//==============================================// 
+
+
+app.listen(PORT, function(){
+    console.log('Magic happens on port: ' + PORT);
+});
