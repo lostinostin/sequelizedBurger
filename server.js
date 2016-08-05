@@ -9,38 +9,41 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 var models = require('./models');
 var sha1 = require('sha1');
-console.log(models);
+// console.log(models);
 
 var PORT = process.env.PORT || 3000;
-//==============================================//
-//						//
-//		Routes				//
-//						//
-//==============================================//
+// //==============================================//
+// //						//
+// //		Routes				//
+// //						//
+// //==============================================//
 
-app.get('/signup', function(req, res){
-   res.render('users/signup'); 
-});
+var routes = require('./controllers/burgers_controller.js');
+app.use('/', routes);
 
-app.post('/user/create', function(req, res){
-    // console.log(req.body);
-    // models.Users.findAll({where: {email: req.body.newemail}})
-    // .then(function(users){
-    //     console.log(JSON.stringify(users));
-    // });
-    models.Users.create({
-        name: req.body.newname,
-        email: req.body.newemail,
-        password: sha1(req.body.newpassword)
-    });
-    res.send('Thank you for signing up');
-});
+// app.get('/signup', function(req, res){
+//    res.render('users/signup'); 
+// });
 
-//==============================================//
-//                                              //
-//              END ROUTES			//
-//                                              //
-//==============================================// 
+// app.post('/user/create', function(req, res){
+//     // console.log(req.body);
+//     // models.Users.findAll({where: {email: req.body.newemail}})
+//     // .then(function(users){
+//     //     console.log(JSON.stringify(users));
+//     // });
+//     models.Users.create({
+//         name: req.body.newname,
+//         email: req.body.newemail,
+//         password: sha1(req.body.newpassword)
+//     });
+//     res.send('Thank you for signing up');
+// });
+
+// //==============================================//
+// //                                              //
+// //              END ROUTES			//
+// //                                              //
+// //==============================================// 
 
 
 app.listen(PORT, function(){
