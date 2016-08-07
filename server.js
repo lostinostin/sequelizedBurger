@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+
+app.use(express.static(process.cwd() + '/public'));
+app.use(methodOverride('_method'));
 
 var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));

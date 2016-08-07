@@ -1,4 +1,6 @@
 var express 			= require('express');
+var methodOverride 		= require('method-override');
+var bodyParser			= require('body-parser');
 var models				= require('./../models');
 var router 				= express.Router();
 models.burgers.sync();
@@ -12,6 +14,25 @@ router.get('/burgers', function(req,res){
 	models.burgers.findAll().then(function(result){
 		object = {burgers:result}
 		res.render('index', object)
+	});
+});
+
+router.post('/burgers/add', function(req,res){
+	models.burgers.create({
+		burger_name: req.body.name,
+		devoured: req.body.devoured
+	}).then(function(){
+		res.redirect('/burgers');
+	})
+});
+
+router.put('/burgers/update/:id', function(req, res){
+	models.burgers.update({
+		devoured: req.body.devoured
+	},{
+		where: {id: req.params.id}
+	}).then(function(){
+		res.redirect('/burgers');
 	});
 });
 
